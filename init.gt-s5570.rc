@@ -14,7 +14,7 @@ on init
 
 # cpufreq configurations
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 245760
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
     write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 500000
     write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
     write /sys/devices/system/cpu/cpufreq/ondemand/down_threshold 30
@@ -109,7 +109,6 @@ on boot
 service hciattach /system/bin/brcm_patchram_plus --enable_hci --enable_lpm --baudrate 3000000 --patchram /system/bin/BCM2049C0_003.001.031.0088.0094.hcd /dev/ttyHS0
 	user bluetooth
 	group bluetooth net_bt_admin
-	disabled
 	oneshot
 
 service qmuxd /system/bin/qmuxd
@@ -127,18 +126,15 @@ on property:init.svc.wpa_supplicant=stopped
 service wpa_supplicant /system/bin/wpa_supplicant -Dawext -W -w -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf
 	group wifi inet
 	socket wpa_wlan0 dgram 660 wifi wifi
-	disabled
 	oneshot
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -BKL
-	disabled
 	oneshot
 
 service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
     user root
     group root
     oneshot
-    disabled
 
 service gps-daemon /system/bin/gpsd
     user system
